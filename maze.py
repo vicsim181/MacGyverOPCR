@@ -2,6 +2,7 @@
 import random
 
 tools = {1:"plastic tube", 2:"ether", 3:"needle"}
+convertion_csv = {" ": 0, "X": 1, "M": 5, "G": 6, "E": 7}
 
 class Character():
     """Class allowing to create characters in the game"""
@@ -20,34 +21,16 @@ def maze_creation():
     """Fonction qui génère et modifie le labyrinthe à partir du fichier CSV"""
     with open("Maze.csv", encoding="utf8") as fichier:
         data = fichier.read()
-        # print(data,"\n")
         data = data[1:]
-        # print(data,"\n")
         data = data.split("\n")
-        # print(data,"\n")
         data = data[:-1]
-        # print(data,"\n")
         for k in range(len(data)):
             data[k] = data[k].split(";")
-        # print(data,"\n")
-        liste = [[ord(character) for character in line] for line in data]
-        # print(liste,"\n")
-        liste2 = []
-        for item in liste:
-            for num in item:
-                liste2.append(num)
-        # print(liste2,"\n")
-        liste3 = [str(number) for number in liste2]
-        # print(liste3,"\n")
-        for i in range(0, len(liste3)):
-            liste3[i] = liste3[i].replace("32", "0")
-            liste3[i] = liste3[i].replace("88", "1")
-            liste3[i] = liste3[i].replace("77", "5")
-            liste3[i] = liste3[i].replace("71", "6")
-            liste3[i] = liste3[i].replace("69", "7")
-        # print(liste3,"\n")
-        liste4 = [int(number) for number in liste3]
-    return liste4
+        liste = []
+        for line in data:
+            for element in line:
+                liste.append(convertion_csv[element])
+    return liste
 
 def get_free_locations(maze):
     """Function finding the free spots in the maze, to later place the items"""
