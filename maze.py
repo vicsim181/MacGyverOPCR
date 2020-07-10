@@ -1,8 +1,9 @@
 """Module implementing the maze, the items and the characters."""
 import random
 
-tools = {1:"plastic tube", 2:"ether", 3:"needle"}
+tools = {2:"plastic tube", 3:"ether", 4:"needle"}
 convertion_csv = {" ": 0, "X": 1, "M": 5, "G": 6, "E": 7}
+symbols = {0: "  ", 1: "██", 2: "🧪", 3: "🍼", 4: "💉", 5: "🕴️", 6: "👻", 7: "🏁", 8: "🏆"}
 
 class Character():
     """Class allowing to create characters in the game"""
@@ -14,7 +15,7 @@ class Character():
     def __repr__(self):
         return self.name + "position: " + self.pos
 
-
+# maze.index(5)
 macgyver = Character("MacGyver", 0, [])
 
 def maze_creation():
@@ -43,76 +44,56 @@ def place_items(maze, places):
         places.remove(item_pos)
         maze[item_pos] = index + 2
 
-symbols = {0: "  ", 1: "██", 2: "🧪", 3: "🍼", 4: "💉", 5: "🕴️", 6: "👻", 7: "🏁", 8: "🏆"}
-
 def draw_maze(maze, symbols):
     """Function that draws the maze on the terminal for the player"""
     for index, tile in enumerate(maze):
         print(symbols[tile], end="\n" if index % 15 == 14 else "")
 
-def action():
+def loop(maze):
     """Function asking what action the player wants to realise.
-It then call the appropriate function, movement, or exiting.
-"""
-    print("What action do you want to make?\n", "To quit the game, press Q.\n",
+    It then calls the appropriate function, movement, or exiting.
+    """
+    while loop:
+        print("What action do you want to make?\n", "To quit the game, press Q.\n",
                          "To move MacGyver, press 'R' to move right, 'L' to move left,",
                          "'U' to move upward, 'D' to move downward.")
-    action = input("")
-    print("\n")
-    if action == "U" or action == "u":
-        if macgyver.pos / 15 < 1:
-            print("MacGyver can't escape the maze anywhere else than through the exit!\n")
-        else:
-            movement(maze1, "U", mouv=-15)
-            draw_maze(maze1, symbols)
-    elif action == "D" or action == "d":
-        if macgyver.pos / 15 >= 14:
-            print("MacGyver can't escape the maze anywhere else than through the exit!\n")
-        else:
-            movement(maze1, "D", mouv=15)
-            draw_maze(maze1, symbols)
-    elif action == "L" or action == "l":
-        if macgyver.pos % 15 == 0:
-            print("MacGyver can't escape the maze anywhere else than through the exit!\n")
-        else:
-            movement(maze1, "L", mouv=-1)
-            draw_maze(maze1, symbols)
-    elif action == "R" or action == "r":
-        if macgyver.pos % 15 == 14:
-            print("MacGyver can't escape the maze anywhere else than through the exit!\n")
-        else:
-            movement(maze1, "R", mouv=1)
-            draw_maze(maze1, symbols)
-    elif action == "Q" or action == "q":
-        exiting()
+        action = input("").lower()
+        print("\n")
+        mouv = 0
+        if action == "u":
+            if macgyver.pos / 15 < 1:
+                print("MacGyver can't escape the maze anywhere else than through the exit!\n")
+                return
+            else:
+                mouv = -15
+        elif action == "d":
+            if macgyver.pos / 15 >= 14:
+                print("MacGyver can't escape the maze anywhere else than through the exit!\n")
+            else:
+                mouv = 15
+        elif action == "l":
+            if macgyver.pos % 15 == 0:
+                print("MacGyver can't escape the maze anywhere else than through the exit!\n")
+            else:
+                mouv = -1
+        elif action == "r":
+            if macgyver.pos % 15 == 14:
+                print("MacGyver can't escape the maze anywhere else than through the exit!\n")
+            else:
+                mouv = 1
+        elif action == "q":
+            exiting()
+        if mouv:
+            move(maze, mouv)
+            draw_maze(maze, symbols)    
 
-def movement(maze, direction, mouv):
+def move(maze, mouv):
     """Movement function in case the player asks for it. Depending on the letter entered,
-MacGyver will move to the right, left, up or down.
-"""
+    MacGyver will move to the right, left, up or down.
+    """
     if maze[macgyver.pos + mouv] == 1:
         print("MacGyver can't move through a wall!\n")
-    elif maze[macgyver.pos + mouv] == 2:
-        print("MacGyver collected the 🧪 object!")
-        macgyver.inventory.append(tools[1])
-        print(macgyver.inventory)
-        maze[macgyver.pos] = 0
-        maze[macgyver.pos + mouv] = 5
-        macgyver.pos = macgyver.pos + mouv
-    elif maze[macgyver.pos + mouv] == 3:
-        print("MacGyver collected the 🍼 object!")
-        macgyver.inventory.append(tools[2])
-        print(macgyver.inventory)
-        maze[macgyver.pos] = 0
-        maze[macgyver.pos + mouv] = 5
-        macgyver.pos = macgyver.pos + mouv
-    elif maze[macgyver.pos + mouv] == 4:
-        print("MacGyver collected the 💉 object!")
-        macgyver.inventory.append(tools[3])
-        print(macgyver.inventory)
-        maze[macgyver.pos] = 0
-        maze[macgyver.pos + mouv] = 5
-        macgyver.pos = macgyver.pos + mouv
+        return
     elif maze[macgyver.pos + mouv] == 6:
         if winning():
             print("Well done! MacGyver fought the guardian and won! He can now exit the maze\n")
@@ -127,13 +108,25 @@ MacGyver will move to the right, left, up or down.
         maze[macgyver.pos] = 0
         maze[macgyver.pos + mouv] = 8
         macgyver.pos = macgyver.pos + mouv
-        draw_maze(maze1, symbols)
+        draw_maze(maze, symbols)
         print("🙂")
         exit()
     else:
+        collect_item(maze, mouv)
         maze[macgyver.pos] = 0
         maze[macgyver.pos + mouv] = 5
         macgyver.pos = macgyver.pos + mouv
+
+def collect_item(maze, mouv):
+    """Fonction checking if the target tile has an object on it. 
+    If it does, the object gets collected inside MacGyver's bag.
+    """
+    if maze[macgyver.pos + mouv] in tools:
+        item = tools[maze[macgyver.pos + mouv]]
+        print("MacGyver has collected the object: {}. It has been added to his bag.".format(item))
+        macgyver.inventory.append(item)
+        print(macgyver.inventory)
+        return
 
 def exiting():
     """Exiting function when the player wants to quit"""
@@ -146,14 +139,15 @@ def winning():
     for element in tools:
         if tools[element] in macgyver.inventory:
             verification += 1
-    if verification == 3:
-        return True
+    return verification == 3
+        
+def main():
+    maze1 = maze_creation()
+    available = get_free_locations(maze1)
+    place_items(maze1, available)
+    draw_maze(maze1, symbols)
+    continuer = 1
+    while continuer:
+        loop(maze1)
 
-
-maze1 = maze_creation()
-available = get_free_locations(maze1)
-place_items(maze1, available)
-draw_maze(maze1, symbols)
-loop = 1
-while loop == 1:
-    action()
+main()
