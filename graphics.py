@@ -25,7 +25,7 @@ while continuer:
     for event in pygame.event.get():
         if event.type == KEYDOWN:
             if event.key in movements:
-                MacGyver_position = MacGyver_position.move(movements[event.key][0])
+                MacGyver_position = MacGyver_position.move(movements[event.key][0]) # A tester
         elif event.type == QUIT:
             continuer = False
     ecran.blit(fond, (0,0))
