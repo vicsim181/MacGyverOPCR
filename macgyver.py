@@ -6,41 +6,55 @@ from constantes import *
 
 pygame.init()
 
-ecran = pygame.display.set_mode((640, 480), pygame.RESIZABLE)
+ecran = pygame.display.set_mode((450, 450), pygame.RESIZABLE)
 fond = pygame.image.load(background_image).convert()
 MacGyver = pygame.image.load(MacGyver_image).convert()
 MacGyver_position = MacGyver.get_rect()
-
-movements = { K_UP: [(0, -3), "u"], 
-              K_DOWN: [(0, 3), "d"],
-              K_LEFT: [(-3, 0), "l"],
-              K_RIGHT: [(3, 0), "r"]}
-
-ecran.blit(fond, (0,0))
-ecran.blit(MacGyver, MacGyver_position)
-pygame.display.flip()
-
 pygame.key.set_repeat(400, 30)
 
-continuer = True
-while continuer:
-    for event in pygame.event.get():
-        if event.type == KEYDOWN:
-            if event.key in movements:
-                MacGyver_position = MacGyver_position.move(movements[event.key][0]) 
-        elif event.type == QUIT:
-            continuer = False
-    ecran.blit(fond, (0,0))
-    ecran.blit(MacGyver, MacGyver_position)
-    pygame.display.flip()            
+movements = { K_UP: [(0, -30), "u"], 
+              K_DOWN: [(0, 30), "d"],
+              K_LEFT: [(-30, 0), "l"],
+              K_RIGHT: [(30, 0), "r"]}
 
-pygame.quit()
+def draw_maze_2(maze):
+    x_pos = 0
+    y_pos = 0
+    for index, tile in enumerate(maze):
+        if maze[index] == 5:
+            ecran.blit(MacGyver, MacGyver_position)
+        elif maze[index] in images:
+            if index % 15 == 0 and index > 0:
+                x_pos = 0
+                y_pos += taille_sprite
+                ecran.blit(pygame.image.load(images[tile]).convert(), (x_pos, y_pos))
+                x_pos += taille_sprite
+            else:
+                ecran.blit(pygame.image.load(images[tile]).convert(), (x_pos, y_pos))
+                x_pos += taille_sprite
+    pygame.display.flip()
 
-# movements = { "a": ["1er élément de a", "2ème élément de a"], 
-#               "b": ["1er élément de b", "2ème élément de b"],
-#               "c": ["1er élément de c", "2ème élément de c"]}
+def main():
+    MacGyver_position = MacGyver.get_rect()
+    maze = Maze()
+    maze = maze_creation()
+    available = get_free_locations(maze)
+    for tool in Items.LIST:  
+        tool.place_items(maze, available)
+    continuer = True
+    while continuer:
+        for event in pygame.event.get():
+            if event.type == KEYDOWN:
+                if event.key in movements:
+                    loop(maze, movements[event.key][1])
+                    MacGyver_position = MacGyver_position.move(macgyver.position % 15, macgyver.position / 15) 
+            elif event.type == QUIT:
+                continuer = False
+        ecran.blit(fond, (0,0))
+        draw_maze_2(maze)
+        ecran.blit(MacGyver, MacGyver_position)
+        pygame.display.flip()            
 
-# d = "c"
+    pygame.quit()
 
-# if d in movements:
-#     print(movements[d][1])
+main()
