@@ -1,5 +1,7 @@
 """Module implementing the maze, the items and the characters."""
 import random
+import pygame
+import pygame.locals
 
 from classes import *
 from constantes import *
