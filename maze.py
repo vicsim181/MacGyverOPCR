@@ -1,3 +1,4 @@
+"""File in which is located the Maze class"""
 import random
 
 class Maze():
@@ -20,11 +21,6 @@ class Maze():
             for line in data:
                 for element in line:
                     self.liste.append(Maze.CONVERTION_CSV[element])
-
-    # def draw(self):
-    #     """Function that draws the maze on the terminal for the player"""
-    #     for index, tile in enumerate(self.liste):
-    #         print(Maze.SYMBOLS[tile], end="\n" if index % 15 == 14 else "")
     
     def get_free_locations(self):
         """Function finding the free spots in the maze, to later place the items"""
