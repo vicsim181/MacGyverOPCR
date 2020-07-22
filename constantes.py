@@ -1,42 +1,36 @@
 """File which contains the various constants variables used by the game"""
 import pygame
-import pygame.locals
 
-symbols = {0: "  ", 1: "██", 2: "🧪", 3: "🍼", 4: "💉", 5: "🕴️", 6: "👻", 7: "🏁", 8: "🏆"}
-convertion_csv = {" ": 0, "X": 1, "M": 5, "G": 6, "E": 7}
+BACKGROUND_IMAGE = "./ressource/background1.png"
+BACKGROUND_IMAGE_2 = "./ressource/background2.jpg"
+MACGYVER_IMAGE = "./ressource/macgyver.png"
+GUARDIAN_IMAGE = "./ressource/Gardien.png"
+ETHER_IMAGE = "./ressource/ether.png"
+NEEDLE_IMAGE = "./ressource/needle.png"
+PLASTIC_TUBE_IMAGE = "./ressource/tube.png"
+SYRINGE_IMAGE = "./ressource/syringe.png"
+WALL_IMAGE = "./ressource/wall.png"
+EXIT_IMAGE = "./ressource/exit2.png"
+REPLAY_IMAGE = "./ressource/replay.png"
+DEFEAT_IMAGE = "./ressource/defeat.png"
+MESSAGE_IMAGE = "./ressource/message.png"
+SIZE_SPRITE = 30
 
-background_image = "./ressource/background1.png"
-background_image_2 = "./ressource/background2.jpg"
-MacGyver_image = "./ressource/macgyver.png"
-guardian_image = "./ressource/Gardien.png"
-ether_image = "./ressource/ether.png"
-needle_image = "./ressource/needle.png"
-plastic_tube_image = "./ressource/tube.png"
-syringe_image = "./ressource/syringe.png"
-wall_image = "./ressource/wall.png"
-exit_image = "./ressource/exit2.png"
-replay_image = "./ressource/replay.png"
-defeat_image = "./ressource/defeat.png"
-message_image = "./ressource/message.png"
-raws_maze = 15
-columns_maze = 15
-taille_sprite = 30
+IMAGES = {1: WALL_IMAGE,
+          2: PLASTIC_TUBE_IMAGE,
+          3: ETHER_IMAGE,
+          4: NEEDLE_IMAGE,
+          5: MACGYVER_IMAGE,
+          6: GUARDIAN_IMAGE,
+          7: EXIT_IMAGE}
 
-images = {1: wall_image, 
-          2: plastic_tube_image, 
-          3: ether_image, 
-          4: needle_image, 
-          5: MacGyver_image, 
-          6: guardian_image,
-          7: exit_image}
+IMAGES_REVERSE = {"Plastic Tube": PLASTIC_TUBE_IMAGE, "Ether": ETHER_IMAGE, "Needle": NEEDLE_IMAGE}
 
-images_reverse = {"Plastic Tube": plastic_tube_image, "Ether": ether_image, "Needle": needle_image}
+SCREEN = pygame.display.set_mode((600, 600))
+BACKGROUND = pygame.image.load(BACKGROUND_IMAGE).convert()
+BACKGROUND2 = pygame.image.load(BACKGROUND_IMAGE_2).convert()
 
-ecran = pygame.display.set_mode((600, 600), pygame.RESIZABLE)
-fond = pygame.image.load(background_image).convert()
-fond2 = pygame.image.load(background_image_2).convert()
-
-movements = { pygame.K_UP: [(0, -30), "u"], 
-              pygame.K_DOWN: [(0, 30), "d"],
-              pygame.K_LEFT: [(-30, 0), "l"],
-              pygame.K_RIGHT: [(30, 0), "r"]}
+MOVEMENTS = {pygame.K_UP: [(0, -30), "u"],
+             pygame.K_DOWN: [(0, 30), "d"],
+             pygame.K_LEFT: [(-30, 0), "l"],
+             pygame.K_RIGHT: [(30, 0), "r"]}

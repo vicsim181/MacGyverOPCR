@@ -4,7 +4,6 @@ import random
 class Maze():
     """Class which holds and initiates the maze we will use in the game."""
     CONVERTION_CSV = {" ": 0, "X": 1, "M": 5, "G": 6, "E": 7}
-    SYMBOLS = {0: "  ", 1: "██", 2: "🧪", 3: "🍼", 4: "💉", 5: "🕴️", 6: "👻", 7: "🏁", 8: "🏆"}
     TOOLS = {2: "Plastic Tube", 3: "Ether", 4: "Needle"}
 
     def __init__(self):
@@ -21,7 +20,7 @@ class Maze():
             for line in data:
                 for element in line:
                     self.liste.append(Maze.CONVERTION_CSV[element])
-    
+
     def get_free_locations(self):
         """Function finding the free spots in the maze, to later place the items"""
         self.places = [i for i in range(0, len(self.liste)) if self.liste[i] == 0]

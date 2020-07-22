@@ -5,6 +5,6 @@ def main():
     """Main function, launching the game, calling the Game class"""
     game = Game()
     game.start()
-    
+
 if __name__ == "__main__":
     main()
