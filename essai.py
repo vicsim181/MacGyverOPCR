@@ -1,4 +1,8 @@
-dico = {"a": ["a1", "a2"], "b": ["b1", "b2"], "c": ["c1", "c2"]}
+"""Ce fichier affiche simplement une ligne grâce à la fonction print."""
 
-print(dico["a"][1])
+import os
 
+print("Salut le monde !")
+
+# Sous Windows il faut mettre ce programme en pause (inutile sous Linux)
+os.system("pause")
