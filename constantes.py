@@ -16,19 +16,7 @@ DEFEAT_IMAGE = "./ressource/defeat.png"
 MESSAGE_IMAGE = "./ressource/message.png"
 SIZE_SPRITE = 30
 
-IMAGES = {1: WALL_IMAGE,
-          2: PLASTIC_TUBE_IMAGE,
-          3: ETHER_IMAGE,
-          4: NEEDLE_IMAGE,
-          5: MACGYVER_IMAGE,
-          6: GUARDIAN_IMAGE,
-          7: EXIT_IMAGE}
-
 IMAGES_REVERSE = {"Plastic Tube": PLASTIC_TUBE_IMAGE, "Ether": ETHER_IMAGE, "Needle": NEEDLE_IMAGE}
-
-SCREEN = pygame.display.set_mode((600, 600))
-BACKGROUND = pygame.image.load(BACKGROUND_IMAGE).convert()
-BACKGROUND2 = pygame.image.load(BACKGROUND_IMAGE_2).convert()
 
 MOVEMENTS = {pygame.K_UP: [(0, -30), "u"],
              pygame.K_DOWN: [(0, 30), "d"],

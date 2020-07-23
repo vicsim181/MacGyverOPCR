@@ -4,7 +4,7 @@ These functions are the mechanic of the game.
 import pygame
 from pygame.locals import *
 
-from constantes import SIZE_SPRITE, REPLAY_IMAGE, DEFEAT_IMAGE, MESSAGE_IMAGE, IMAGES, IMAGES_REVERSE, SCREEN, BACKGROUND, BACKGROUND2, MOVEMENTS
+from constantes import REPLAY_IMAGE, DEFEAT_IMAGE, MOVEMENTS, BACKGROUND_IMAGE, BACKGROUND_IMAGE_2, IMAGES_REVERSE, MESSAGE_IMAGE
 from character import Character
 from maze import Maze
 
@@ -12,12 +12,21 @@ class Game():
     """Class holding the main mechanisms of the game"""
     def __init__(self):
         """Constructor"""
-        self.custom_font = ""
-        self.custom_text = ""
+        self.screen = pygame.display.set_mode((600, 600))
+        self.background = pygame.image.load(BACKGROUND_IMAGE).convert()
+        self.background2 = pygame.image.load(BACKGROUND_IMAGE_2).convert()
+        self.custom_font = None
+        self.custom_text = None
         self.number = 0
-        self.macgyver = ""
-        self.x_image = ""
-        self.maze = ""
+        self.macgyver = None
+        self.maze = None
+        self.images = {1: WALL_IMAGE,
+          2: PLASTIC_TUBE_IMAGE,
+          3: ETHER_IMAGE,
+          4: NEEDLE_IMAGE,
+          5: MACGYVER_IMAGE,
+          6: GUARDIAN_IMAGE,
+          7: EXIT_IMAGE} # associer 1 numéro à une image avec pygame image load pour chaque entier 
 
     def start(self):
         """Function creating the attributes and starting the loop which allows the game running"""
@@ -36,8 +45,7 @@ class Game():
                         self.loop(MOVEMENTS[event.key][1])
                 elif event.type == QUIT:
                     continuer = False
-            self.show_maze()
-            pygame.display.flip()
+            self.draw()
 
     def loop(self, movement):
         """Function asking what action the player wants to realise.
@@ -51,8 +59,7 @@ class Game():
             mouv = 0 if self.macgyver.position % 15 == 0 else -1
         elif movement == "r":
             mouv = 0 if self.macgyver.position % 15 == 14 else 1
-        if isinstance(mouv, int):
-            self.move(mouv)
+        self.move(mouv)
 
     def move(self, mouv):
         """Movement function in case the player asks for it. Depending on the letter entered,
@@ -88,9 +95,9 @@ class Game():
     def replay(self):
         """Function offering the choice to the player to play another game or quitting once he won or lose"""
         if self.number == 3:
-            SCREEN.blit(pygame.image.load(REPLAY_IMAGE), (0, 0))
+            self.screen.blit(pygame.image.load(REPLAY_IMAGE), (0, 0))
         else:
-            SCREEN.blit(pygame.image.load(DEFEAT_IMAGE), (0, 0))
+            self.screen.blit(pygame.image.load(DEFEAT_IMAGE), (0, 0))
         continuer = True
         while continuer:
             for event in pygame.event.get():
@@ -100,24 +107,13 @@ class Game():
                     exit()
             pygame.display.flip()
 
-    def show_maze(self):
-        """Function displaying the maze through the pygame interface"""
-        SCREEN.blit(BACKGROUND, (0, 0))
-        SCREEN.blit(BACKGROUND2, (60, 60))
-        SCREEN.blit(self.custom_text, (0, 0))
-        x_pos = 60
-        y_pos = 60
-        for index, tile in enumerate(self.maze.liste):
-            if index % 15 == 0 and index > 0:
-                x_pos = 60
-                y_pos += SIZE_SPRITE
-            if self.maze.liste[index] in IMAGES:
-                SCREEN.blit(pygame.image.load(IMAGES[tile]).convert_alpha(), (x_pos, y_pos))
-            x_pos += SIZE_SPRITE
-        self.x_image = 5
-        for items in self.macgyver.inventory:
-            SCREEN.blit(pygame.image.load(IMAGES_REVERSE[items]).convert_alpha(), (self.x_image, 30))
-            self.x_image += 35
+    def draw(self):
+        self.screen.blit(self.background, (0, 0))
+        self.screen.blit(self.background2, (60, 60))
+        self.screen.blit(self.custom_text, (0, 0))
+        self.maze.draw(self.screen)
+        for index, items in enumerate(self.macgyver.inventory):
+            self.screen.blit(pygame.image.load(IMAGES_REVERSE[items]).convert_alpha(), (index*35, 30))
         if self.number == 3:
-            SCREEN.blit(pygame.image.load(MESSAGE_IMAGE).convert_alpha(), (170, 7))
+            self.screen.blit(pygame.image.load(MESSAGE_IMAGE).convert_alpha(), (170, 7))
         pygame.display.flip()

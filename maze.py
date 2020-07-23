@@ -1,5 +1,9 @@
 """File in which is located the Maze class"""
+import pygame
+from pygame.locals import *
 import random
+
+from constantes import SIZE_SPRITE, REPLAY_IMAGE, DEFEAT_IMAGE, MESSAGE_IMAGE, IMAGES_REVERSE, MOVEMENTS
 
 class Maze():
     """Class which holds and initiates the maze we will use in the game."""
@@ -31,3 +35,15 @@ class Maze():
             item_pos = random.choice(places)
             self.places.remove(item_pos)
             self.liste[item_pos] = tool
+
+    def draw(self, screen):
+        """Function displaying the maze through the pygame interface"""
+        x_pos, y_pos = 60, 60
+        for index, tile in enumerate(self.liste):
+            if index % 15 == 0 and index > 0:
+                x_pos = 60
+                y_pos += SIZE_SPRITE
+            if self.liste[index] in IMAGES:
+                screen.blit(pygame.image.load(IMAGES[tile]).convert_alpha(), (x_pos, y_pos))
+            x_pos += SIZE_SPRITE
+        
