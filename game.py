@@ -10,6 +10,10 @@ from maze import Maze
 
 class Game():
     """Class holding the main mechanisms of the game"""
+
+    BACKGROUND_IMAGE = "./ressource/background1.png"
+    BACKGROUND_IMAGE_2 = "./ressource/background2.jpg"
+
     def __init__(self):
         """Constructor"""
         self.screen = pygame.display.set_mode((600, 600))
@@ -20,13 +24,6 @@ class Game():
         self.number = 0
         self.macgyver = None
         self.maze = None
-        self.images = {1: WALL_IMAGE,
-          2: PLASTIC_TUBE_IMAGE,
-          3: ETHER_IMAGE,
-          4: NEEDLE_IMAGE,
-          5: MACGYVER_IMAGE,
-          6: GUARDIAN_IMAGE,
-          7: EXIT_IMAGE} # associer 1 numéro à une image avec pygame image load pour chaque entier 
 
     def start(self):
         """Function creating the attributes and starting the loop which allows the game running"""
@@ -34,7 +31,7 @@ class Game():
         pygame.font.init()
         self.custom_font = pygame.font.SysFont('Arial', 20)
         self.custom_text = self.custom_font.render("MacGyver's bag:", False, (0, 0, 0))
-        self.number, self.macgyver, self.maze = 0, Character("MacGyver", 0), Maze()
+        self.number, self.macgyver, self.maze = 0, Character("MacGyver", 0, "./ressource/macgyver.png"), Maze()
         self.macgyver.position, self.macgyver.inventory = 0, []
         self.maze.get_free_locations(); self.maze.place_items(self.maze.places)
         continuer = True
@@ -65,21 +62,21 @@ class Game():
         """Movement function in case the player asks for it. Depending on the letter entered,
         MacGyver will move to the right, left, up or down.
         """
-        if self.maze.liste[self.macgyver.position + mouv] == 1:
+        if self.maze.liste_2[self.macgyver.position + mouv].status == "wall":
             return
-        elif self.maze.liste[self.macgyver.position + mouv] == 6:
+        elif self.maze.liste_2[self.macgyver.position + mouv].status == "guardian":
             if self.number == 3:
-                self.maze.liste[self.macgyver.position], self.maze.liste[self.macgyver.position + mouv] = 0, 5
+                self.maze.liste_2[self.macgyver.position], self.maze.liste_2[self.macgyver.position + mouv] = 0, 5
                 self.macgyver.position = self.macgyver.position + mouv
             else:
                 self.replay()
-        elif self.maze.liste[self.macgyver.position + mouv] == 7:
-            self.maze.liste[self.macgyver.position], self.maze.liste[self.macgyver.position + mouv] = 0, 8
+        elif self.maze.liste_2[self.macgyver.position + mouv] == 7:
+            self.maze.liste_2[self.macgyver.position], self.maze.liste_2[self.macgyver.position + mouv] = 0, 8
             self.macgyver.position = self.macgyver.position + mouv
             self.replay()
         else:
             self.collect_item(mouv)
-            self.maze.liste[self.macgyver.position], self.maze.liste[self.macgyver.position + mouv] = 0, 5
+            self.maze.liste_2[self.macgyver.position], self.maze.liste_2[self.macgyver.position + mouv] = 0, 5
             self.macgyver.position = self.macgyver.position + mouv
 
     def collect_item(self, mouv):
@@ -87,7 +84,7 @@ class Game():
         If it does, the object gets collected inside MacGyver's bag.
         """
         for item in Maze.TOOLS.keys():
-            if self.maze.liste[self.macgyver.position + mouv] == item:
+            if self.maze.liste_2[self.macgyver.position + mouv] == item:
                 self.macgyver.inventory.append(Maze.TOOLS[item])
                 self.number += 1
                 return
@@ -112,8 +109,6 @@ class Game():
         self.screen.blit(self.background2, (60, 60))
         self.screen.blit(self.custom_text, (0, 0))
         self.maze.draw(self.screen)
-        for index, items in enumerate(self.macgyver.inventory):
-            self.screen.blit(pygame.image.load(IMAGES_REVERSE[items]).convert_alpha(), (index*35, 30))
-        if self.number == 3:
-            self.screen.blit(pygame.image.load(MESSAGE_IMAGE).convert_alpha(), (170, 7))
-        pygame.display.flip()
+
+# Adapter une fois que les classes sont prêtes
+# voir comment gérer les déplacements etc 
