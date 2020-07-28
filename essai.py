@@ -1,8 +1,22 @@
-"""Ce fichier affiche simplement une ligne grâce à la fonction print."""
+STATUS = {0: "corridor",
+          1: "wall",
+          5: "macgyver",
+          6: "guardian",
+          7: "exit"}
+    
+IMAGES = {"wall": "./ressource/wall.png",
+          "corridor": "",
+          "macgyver": "",
+          "exit": "./ressource/exit2.png",
+          "guardian": "./ressource/Gardien.png"}
 
-import os
+status = ""
+image = ""
+def essai(value):
+    status= STATUS[value]
+    image = IMAGES[status]
+    print(status)
+    print(image)
 
-print("Salut le monde !")
+essai(1)
 
-# Sous Windows il faut mettre ce programme en pause (inutile sous Linux)
-os.system("pause")

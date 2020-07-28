@@ -3,8 +3,8 @@ import pygame
 from pygame.locals import *
 from character import Character
 from tiles import Tiles
-from items import Items, PlasticTube, Ether, Needle
-from constantes import SIZE_SPRITE, REPLAY_IMAGE, DEFEAT_IMAGE, MESSAGE_IMAGE, IMAGES_REVERSE, MOVEMENTS
+from items import PlasticTube, Ether, Needle
+from constantes import SIZE_SPRITE, REPLAY_IMAGE, DEFEAT_IMAGE, MESSAGE_IMAGE, MOVEMENTS
 import random
 
 class Maze():
@@ -29,7 +29,7 @@ class Maze():
                 for element in line:
                     self.liste.append(Maze.CONVERTION_CSV[element])
             for index, value in enumerate(self.liste):
-                self.liste_2[index] = Tiles(index, value)
+                self.liste_2.append(Tiles(index, value))
 
     def get_free_locations(self):
         """Function finding the free spots in the maze, to later place the items"""
@@ -42,12 +42,11 @@ class Maze():
             item_pos = random.choice(places)
             self.places.remove(item_pos)
             self.liste_2[item_pos] = Maze.TOOLS[tool]
+            Maze.TOOLS[tool].index = item_pos
+            Maze.TOOLS[tool].position = Maze.TOOLS[tool].get_position()
 
     def draw(self, screen):
         """Function displaying the maze through the pygame interface"""
         for tiles in self.liste_2:
-            screen.blit(pygame.image.load(tiles.image).convert_alpha(), (tiles.position))
-        
-# Mettre à jour les imports depuis constantes
-# vérifier le concept d'avoir deux listes, si nécessaire ou non vu que l'index est sauvegardé dans chaque tuile
-# Vérifier processus de construction du labyrinthe et dessin
+            tiles.get_position()
+            tiles.draw(screen) if tiles.image != "" else ""
