@@ -5,7 +5,7 @@ from constantes import SIZE_SPRITE
 class Items():
     """Parent class of the items, defining their basic attributes and the method to get their pygame position"""
     def __init__(self, name):
-        self.position, self.index, self.image = None, 0, ""
+        self.status, self.position, self.index = name, None, 0
 
     def get_position(self):
         """Function determining the pygame position of the object"""
