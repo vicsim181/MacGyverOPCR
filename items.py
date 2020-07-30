@@ -1,15 +1,12 @@
 """File hosting the classes of the items"""
 import pygame
-from pygame.locals import *
 from constantes import SIZE_SPRITE
 
 class Items():
-    def __init__(self):
-        pass
+    """Parent class of the items, defining their basic attributes and the method to get their pygame position"""
+    def __init__(self, name):
+        self.position, self.index, self.image = None, 0, ""
 
-    def draw(self, screen):
-        screen.blit(pygame.image.load(self.image), (self.position))
-    
     def get_position(self):
         """Function determining the pygame position of the object"""
         x_pos, y_pos = 75, 75
@@ -25,27 +22,27 @@ class Items():
             y_pos += (round(self.index/15) - 1) * SIZE_SPRITE
         self.position = (x_pos, y_pos)
 
+    def draw(self, screen):
+        """function used to draw them on the pygame interface"""
+        screen.blit(pygame.image.load(self.image), (self.position))
+
+
 class PlasticTube(Items):
+    """Child class for the plastic tube"""
     def __init__(self, name):
-        Items.__init__(self)
-        self.status = name
         self.image = "./ressource/tube.png"
-        self.position = None
-        self.index = 0
-        
+        Items.__init__(self, name)
+
 
 class Ether(Items):
+    """Child class for the ether"""
     def __init__(self, name):
-        Items.__init__(self)
-        self.status = name
         self.image = "./ressource/ether.png"
-        self.position = None
-        self.index = 0
+        Items.__init__(self, name)
+
 
 class Needle(Items):
+    """Child class for the needle"""
     def __init__(self, name):
-        Items.__init__(self)
-        self.status = name
         self.image = "./ressource/needle.png"
-        self.position = None
-        self.index = 0
+        Items.__init__(self, name)

@@ -1,6 +1,5 @@
 """File hosting the classe of the tiles"""
 import pygame
-from pygame.locals import *
 from constantes import SIZE_SPRITE
 class Tiles():
     """Class holding the tiles, their attributes and a function determining the pygame position"""
@@ -39,10 +38,5 @@ class Tiles():
         self.position = (x_pos, y_pos)
     
     def draw(self, screen):
+        """Function allowing the tile to draw itself"""
         screen.blit(pygame.image.load(self.image), (self.position))
-
-class Guardian(Tiles):
-    def __init__(self):
-        super.__init__()
-    
-
