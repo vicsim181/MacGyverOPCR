@@ -1,3 +1,2 @@
-pylint
-pygame
+pygame 2.0.0dev6 
 random

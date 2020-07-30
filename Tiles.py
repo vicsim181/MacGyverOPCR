@@ -1,42 +1,35 @@
-"""File hosting the classe of the tiles"""
-import pygame
-from constantes import SIZE_SPRITE
-class Tiles():
-    """Class holding the tiles, their attributes and a function determining the pygame position"""
-    STATUS = {0: "corridor",
-              1: "wall",
-              5: "macgyver",
-              6: "guardian",
-              7: "exit"}
-    
-    IMAGES = {"wall": "./ressource/wall.png",
-              "corridor": "",
-              "macgyver": "",
-              "exit": "./ressource/exit2.png",
-              "guardian": "./ressource/Gardien.png"}
+from tile import Tile 
+from constantes import WALL_IMAGE, EXIT_IMAGE, GUARDIAN_IMAGE, MACGYVER_IMAGE, PLASTICTUBE_IMAGE, ETHER_IMAGE, NEEDLE_IMAGE
 
-    def __init__(self, index, value):
-        """Initialization of the tile object"""
-        self.position = None
-        self.index, self.value = index, value
-        self.status = Tiles.STATUS[self.value]
-        self.image = Tiles.IMAGES[self.status]
-    
-    def get_position(self):
-        """Function determining the pygame position of the object"""
-        x_pos, y_pos = 75, 75
-        if self.index == 0:
-            pass
-        elif self.index % 15 == 0 and self.index > 0:
-                y_pos += (self.index/15) * SIZE_SPRITE
-        elif self.index % 15 < 8 and self.index > 0:
-            x_pos += (self.index % 15 * SIZE_SPRITE)
-            y_pos += round(self.index/15) * SIZE_SPRITE
-        else:
-            x_pos += (self.index % 15 * SIZE_SPRITE)
-            y_pos += (round(self.index/15) - 1) * SIZE_SPRITE
-        self.position = (x_pos, y_pos)
-    
-    def draw(self, screen):
-        """Function allowing the tile to draw itself"""
-        screen.blit(pygame.image.load(self.image), (self.position))
+
+class Corridor(Tile):
+    def __init__(self):
+        super().__init__()
+
+class Wall(Tile):
+    def __init__(self):
+        super().__init__(WALL_IMAGE)
+
+class Exit(Tile):
+    def __init__(self):
+        super().__init__(EXIT_IMAGE)
+
+class Guardian(Tile):
+    def __init__(self):
+        super().__init__(GUARDIAN_IMAGE)
+
+class Macgyver(Tile):
+    def __init__(self):
+        super().__init__(MACGYVER_IMAGE)
+
+class PlasticTube(Tile):
+    def __init__(self):
+        super().__init__(PLASTICTUBE_IMAGE)
+
+class Ether(Tile):
+    def __init__(self):
+        super().__init__(ETHER_IMAGE)
+
+class Needle(Tile):
+    def __init__(self):
+        super().__init__(NEEDLE_IMAGE)

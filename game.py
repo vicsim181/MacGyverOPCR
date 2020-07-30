@@ -1,81 +1,110 @@
 """File which contains the Game class, its attributes and functions.These functions are the mechanic of the game."""
 import pygame
 from pygame.locals import *
-from tiles import Tiles
-from constantes import REPLAY_IMAGE, DEFEAT_IMAGE, MOVEMENTS, MESSAGE_IMAGE
-from character import Character
+from tile import Tile
+from tiles import Wall, Corridor, Exit, Guardian, Macgyver, PlasticTube, Ether, Needle
+from constantes import REPLAY_IMAGE, DEFEAT_IMAGE, MOVEMENTS, MESSAGE_IMAGE, BACKGROUND_IMAGE_2, BACKGROUND_IMAGE, PLASTICTUBE_IMAGE, ETHER_IMAGE, NEEDLE_IMAGE
 from maze import Maze
 
 class Game():
     """Class holding the main mechanisms of the game"""
-    BACKGROUND_IMAGE, BACKGROUND_IMAGE_2 = "./ressource/background1.png", "./ressource/background2.jpg"
 
     def __init__(self):
         """Constructor"""
         self.screen = pygame.display.set_mode((600, 600))
-        self.background = pygame.image.load(Game.BACKGROUND_IMAGE).convert()
-        self.background2 = pygame.image.load(Game.BACKGROUND_IMAGE_2).convert()
+        self.background = pygame.image.load(BACKGROUND_IMAGE).convert()
+        self.background2 = pygame.image.load(BACKGROUND_IMAGE_2).convert()
+        self.plastic_tube_img = pygame.image.load(PLASTICTUBE_IMAGE).convert_alpha()
+        self.ether_img = pygame.image.load(ETHER_IMAGE).convert_alpha()
+        self.needle_img = pygame.image.load(NEEDLE_IMAGE).convert_alpha()
+        self.victory_img = pygame.image.load(REPLAY_IMAGE).convert_alpha()
+        self.defeat_img = pygame.image.load(DEFEAT_IMAGE).convert_alpha()
         self.custom_font, self.custom_text = None, None
-        self.macgyver, self.maze = None, None
+        self.message_img = pygame.image.load(MESSAGE_IMAGE).convert_alpha()
+        self.maze, self.state = None, "running"
 
     def start(self):
         """Function creating the attributes and starting the loop which allows the game running"""
-        pygame.key.set_repeat(400, 30); pygame.font.init()
+        pygame.key.set_repeat(400, 30) 
+        pygame.font.init()
         self.custom_font = pygame.font.SysFont('Arial', 20)
         self.custom_text = self.custom_font.render("MacGyver's bag:", False, (0, 0, 0))
-        self.macgyver, self.maze = Character("MacGyver", 0, "./ressource/macgyver.png"), Maze()
+        self.maze, self.maze.liste[0] = Maze(), Macgyver()
         self.maze.get_free_locations(); self.maze.place_items(self.maze.places)
-        self.maze.liste_2[0] = self.macgyver
         continuer = True
         while continuer:
             for event in pygame.event.get():
                 if event.type == KEYDOWN:
-                    self.loop(MOVEMENTS[event.key][1]) if event.key in MOVEMENTS else ""
+                    self.move(MOVEMENTS[event.key][1]) if event.key in MOVEMENTS else ""
                 elif event.type == QUIT:
                     continuer = False
             self.draw()
 
-    def loop(self, movement):
+    def move(self, movement):
         """Function waiting for the player to choose one direction with the arrays of the keyboard.
-        It then executes a movement if this one is valid, it does nothing if not. 
+        It then executes a movement if this one is valid, it does nothing if not.
         """
+        macgyver_pos = self.maze.find_macgyver()
         if movement == "u":
-            mouv = 0 if self.macgyver.index / 15 < 1 else -15
+            mouv = 0 if macgyver_pos / 15 < 1 else -15
         elif movement == "d":
-            mouv = 0 if self.macgyver.index / 15 >= 14 else 15
+            mouv = 0 if macgyver_pos / 15 >= 14 else 15
         elif movement == "l":
-            mouv = 0 if self.macgyver.index % 15 == 0 else -1
+            mouv = 0 if macgyver_pos % 15 == 0 else -1
         elif movement == "r":
-            mouv = 0 if self.macgyver.index % 15 == 14 else 1
-        if self.maze.liste_2[self.macgyver.index + mouv].status == "wall":
+            mouv = 0 if macgyver_pos % 15 == 14 else 1
+        if isinstance(self.maze.liste[macgyver_pos + mouv], Wall):
             return
-        elif self.maze.liste_2[self.macgyver.index + mouv].status == "guardian":
-            self.macgyver.winning(self.maze, mouv) if len(self.macgyver.inventory) == 3 else self.replay()
-        elif self.maze.liste_2[self.macgyver.index + mouv].status == "exit":
-            self.replay()
+        elif isinstance(self.maze.liste[macgyver_pos + mouv], Guardian):
+            if self.state == "beat":
+                self.maze.liste[macgyver_pos] = Corridor()
+                self.maze.liste[macgyver_pos + mouv] = Macgyver()
+            else:
+                self.state = "defeat"
+        elif isinstance(self.maze.liste[macgyver_pos + mouv], Exit):
+            self.state = "win"
         else:
-            self.macgyver.collect_item(Maze.TOOLS, self.maze, mouv)
-            self.maze.liste_2[self.macgyver.index] = Tiles(self.macgyver.index, 0)
-            self.maze.liste_2[self.macgyver.index + mouv] = self.macgyver
-            self.macgyver.index = self.macgyver.index + mouv
+            self.maze.liste[macgyver_pos] = Corridor()
+            self.maze.liste[macgyver_pos + mouv] = Macgyver()
+        self.check_state()
 
-    def replay(self):
-        """Function offering the choice to the player to play another game or quitting once he won or lose"""
-        if len(self.macgyver.inventory) == 3:
-            self.screen.blit(pygame.image.load(REPLAY_IMAGE), (0, 0))
-        else:
-            self.screen.blit(pygame.image.load(DEFEAT_IMAGE), (0, 0))
-        continuer = True
-        while continuer:
-            for event in pygame.event.get():
-                if event.type == KEYDOWN and event.key == K_F1:
-                    self.start()
-                elif event.type == KEYDOWN and event.key == K_F2:
-                    exit()
-            pygame.display.flip()
+    def draw_inventory(self):
+        if not self.maze.find_plastic_tube():
+            self.screen.blit(self.plastic_tube_img, (0, 30))
+        if not self.maze.find_ether():
+            self.screen.blit(self.ether_img, (35, 30))
+        if not self.maze.find_needle():
+            self.screen.blit(self.needle_img, (70, 30))
+
+    def draw_message(self):
+        if self.state == "beat":
+            self.screen.blit(self.message_img, (170, 7))
+        elif self.state == "win":
+            self.screen.blit(self.victory_img, (0, 0))
+            self.choice()
+        elif self.state == "defeat":
+            self.screen.blit(self.defeat_img, (0, 0))         # message défaite ne s'affiche pas 
+            self.choice()
+
+    def check_state(self):
+        if self.maze.find_plastic_tube() or self.maze.find_ether() or self.maze.find_needle() and self.state != "defeat":
+            self.state = "running"
+        elif self.maze.find_guardian() and self.state == "running":
+            self.state = "beat"
+    
+    def choice(self):
+        for event in pygame.event.get():                            # Choix F1 ou F2 ne fonctionne pas bien
+            if event.type == KEYDOWN and event.key == K_F1:
+                self.start()
+            elif event.type == KEYDOWN and event.key == K_F2:
+                exit()
 
     def draw(self):
         "Function drawing the maze, the tiles and MacGyver"
-        self.screen.blit(self.background, (0, 0)); self.screen.blit(self.background2, (75, 75))
-        self.screen.blit(self.custom_text, (0, 0)); self.maze.draw(self.screen)
-        self.macgyver.draw_inventory(self.screen)
+        self.screen.blit(self.background, (0, 0))
+        self.screen.blit(self.background2, (75, 75))
+        self.screen.blit(self.custom_text, (0, 0))
+        self.maze.draw(self.screen)
+        self.draw_inventory()
+        self.draw_message()
+        pygame.display.flip()
