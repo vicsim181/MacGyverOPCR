@@ -66,7 +66,7 @@ class Game():
         else:
             self.maze.liste[macgyver_pos] = Corridor()
             self.maze.liste[macgyver_pos + mouv] = Macgyver()
-        self.check_state()
+        self.check_ready()
 
     def draw_inventory(self):
         if not self.maze.find_plastic_tube():
@@ -79,22 +79,20 @@ class Game():
     def draw_message(self):
         if self.state == "beat":
             self.screen.blit(self.message_img, (170, 7))
-        elif self.state == "win":
+        if self.state == "win":
             self.screen.blit(self.victory_img, (0, 0))
             self.choice()
-        elif self.state == "defeat":
-            self.screen.blit(self.defeat_img, (0, 0))         # message défaite ne s'affiche pas 
+        if self.state == "defeat":
+            self.screen.blit(self.defeat_img, (0, 0))
             self.choice()
 
-    def check_state(self):
-        if self.maze.find_plastic_tube() or self.maze.find_ether() or self.maze.find_needle() and self.state != "defeat":
-            self.state = "running"
-        elif self.maze.find_guardian() and self.state == "running":
+    def check_ready(self):
+        if not self.maze.find_plastic_tube() and not self.maze.find_ether() and not self.maze.find_needle() and self.maze.find_guardian():
             self.state = "beat"
     
     def choice(self):
-        for event in pygame.event.get():                            # Choix F1 ou F2 ne fonctionne pas bien
-            if event.type == KEYDOWN and event.key == K_F1:
+        for event in pygame.event.get():
+            if event.type == KEYDOWN and event.key == K_F1:  # F1 ne fonctionne pas 
                 self.start()
             elif event.type == KEYDOWN and event.key == K_F2:
                 exit()
