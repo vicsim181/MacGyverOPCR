@@ -8,6 +8,8 @@ from maze import Maze
 
 class Game():
     """Class holding the main mechanisms of the game"""
+    DECISION = {pygame.K_F1: 1,
+                pygame.K_F2: 2}
 
     def __init__(self):
         """Constructor"""
@@ -21,7 +23,7 @@ class Game():
         self.defeat_img = pygame.image.load(DEFEAT_IMAGE).convert_alpha()
         self.custom_font, self.custom_text = None, None
         self.message_img = pygame.image.load(MESSAGE_IMAGE).convert_alpha()
-        self.maze, self.state = None, "running"
+        self.maze, self.state, self.decision = None, "running", 0
 
     def start(self):
         """Function creating the attributes and starting the loop which allows the game running"""
@@ -30,12 +32,16 @@ class Game():
         self.custom_font = pygame.font.SysFont('Arial', 20)
         self.custom_text = self.custom_font.render("MacGyver's bag:", False, (0, 0, 0))
         self.maze, self.maze.liste[0] = Maze(), Macgyver()
-        self.maze.get_free_locations(); self.maze.place_items(self.maze.places)
+        self.maze.get_free_locations() 
+        self.maze.place_items(self.maze.places)
         continuer = True
         while continuer:
             for event in pygame.event.get():
                 if event.type == KEYDOWN:
                     self.move(MOVEMENTS[event.key][1]) if event.key in MOVEMENTS else ""
+                    if self.state == "win" or self.state == "defeat":
+                        self.decision = Game.DECISION[event.key] if event.key in Game.DECISION else 0
+                        self.end()
                 elif event.type == QUIT:
                     continuer = False
             self.draw()
@@ -81,21 +87,18 @@ class Game():
             self.screen.blit(self.message_img, (170, 7))
         if self.state == "win":
             self.screen.blit(self.victory_img, (0, 0))
-            self.choice()
         if self.state == "defeat":
             self.screen.blit(self.defeat_img, (0, 0))
-            self.choice()
 
     def check_ready(self):
         if not self.maze.find_plastic_tube() and not self.maze.find_ether() and not self.maze.find_needle() and self.maze.find_guardian():
             self.state = "beat"
-    
-    def choice(self):
-        for event in pygame.event.get():
-            if event.type == KEYDOWN and event.key == K_F1:  # F1 ne fonctionne pas 
-                self.start()
-            elif event.type == KEYDOWN and event.key == K_F2:
-                exit()
+
+    def end(self):
+        if self.decision == 1:
+            self.start()
+        elif self.decision == 2:
+            exit()
 
     def draw(self):
         "Function drawing the maze, the tiles and MacGyver"
