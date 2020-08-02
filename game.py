@@ -13,6 +13,7 @@ class Game():
 
     def __init__(self):
         """Constructor"""
+        self.binary = 1
         self.screen = pygame.display.set_mode((600, 600))
         self.background = pygame.image.load(BACKGROUND_IMAGE).convert()
         self.background2 = pygame.image.load(BACKGROUND_IMAGE_2).convert()
@@ -40,7 +41,7 @@ class Game():
                 if event.type == KEYDOWN:
                     self.move(MOVEMENTS[event.key][1]) if event.key in MOVEMENTS else ""
                     if self.state == "win" or self.state == "defeat":
-                        self.decision = Game.DECISION[event.key] if event.key in Game.DECISION else 0
+                        self.binary = Game.DECISION[event.key] if event.key in Game.DECISION else 0
                         self.end()
                 elif event.type == QUIT:
                     continuer = False
@@ -95,9 +96,10 @@ class Game():
             self.state = "beat"
 
     def end(self):
-        if self.decision == 1:
+        if self.binary == 1:
+            self.__init__()
             self.start()
-        elif self.decision == 2:
+        elif self.binary == 2:
             exit()
 
     def draw(self):
