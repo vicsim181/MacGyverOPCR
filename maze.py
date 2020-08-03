@@ -42,8 +42,13 @@ class Maze():
             tile.draw(screen, index)
 
     def tile_factory(self, character):
-        cls = Maze.CONVERSION_CSV[character]
-        return cls()
+        try:
+            cls = Maze.CONVERSION_CSV[character]
+            return cls()
+        except KeyError as err:
+            print("The CSV file contains a {}, it is not a valid character,\
+therefore the maze cannot be converted into a visible element. Please fix it.".format(err))
+            exit()
     
     def find_first_tile(self, cls):
         for index, tile in enumerate(self.liste):
