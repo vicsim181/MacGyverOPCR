@@ -3,7 +3,7 @@ import pygame
 from pygame.locals import *
 from tile import Tile
 from tiles import Wall, Corridor, Guardian, Exit, Macgyver, PlasticTube, Ether, Needle
-from constantes import SIZE_SPRITE, REPLAY_IMAGE, DEFEAT_IMAGE, MESSAGE_IMAGE, MOVEMENTS
+from constants import SIZE_SPRITE, REPLAY_IMAGE, DEFEAT_IMAGE, MESSAGE_IMAGE, MOVEMENTS
 import random
 
 class Maze():

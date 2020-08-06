@@ -3,7 +3,7 @@ import pygame
 from pygame.locals import *
 from tile import Tile
 from tiles import Wall, Corridor, Exit, Guardian, Macgyver, PlasticTube, Ether, Needle
-from constantes import REPLAY_IMAGE, DEFEAT_IMAGE, MOVEMENTS, MESSAGE_IMAGE, BACKGROUND_IMAGE_2, BACKGROUND_IMAGE, PLASTICTUBE_IMAGE, ETHER_IMAGE, NEEDLE_IMAGE
+from constants import REPLAY_IMAGE, DEFEAT_IMAGE, MOVEMENTS, MESSAGE_IMAGE, BACKGROUND_IMAGE_2, BACKGROUND_IMAGE, PLASTICTUBE_IMAGE, ETHER_IMAGE, NEEDLE_IMAGE
 from maze import Maze
 
 class Game():

@@ -1,6 +1,6 @@
 """File hosting the classe of the tiles"""
 import pygame
-from constantes import SIZE_SPRITE
+from constants import SIZE_SPRITE
 class Tile():
     """Class holding the tiles, their attributes and a function determining the pygame position"""
 
