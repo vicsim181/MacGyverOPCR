@@ -8,12 +8,12 @@ from maze import Maze
 
 class Game():
     """Class holding the main mechanisms of the game"""
-    DECISION = {pygame.K_F1: 1,
-                pygame.K_F2: 2}
+    DECISION = {pygame.K_F1: False,
+                pygame.K_F2: True}
 
     def __init__(self):
         """Constructor"""
-        self.binary = 1
+        self.is_exiting = None
         self.screen = pygame.display.set_mode((600, 600))
         self.background = pygame.image.load(BACKGROUND_IMAGE).convert()
         self.background2 = pygame.image.load(BACKGROUND_IMAGE_2).convert()
@@ -41,7 +41,7 @@ class Game():
                 if event.type == KEYDOWN:
                     self.move(MOVEMENTS[event.key][1]) if event.key in MOVEMENTS else ""
                     if self.state == "win" or self.state == "defeat":
-                        self.binary = Game.DECISION[event.key] if event.key in Game.DECISION else 0
+                        self.is_exiting = Game.DECISION[event.key] if event.key in Game.DECISION else None
                         self.end()
                 elif event.type == QUIT:
                     continuer = False
@@ -96,11 +96,11 @@ class Game():
             self.state = "beat"
 
     def end(self):
-        if self.binary == 1:
-            self.__init__()
-            self.start()
-        elif self.binary == 2:
+        if self.is_exiting:
             exit()
+        elif self.is_exiting == False:
+            self.__init__()
+            self.start()            
 
     def draw(self):
         "Function drawing the maze, the tiles and MacGyver"
