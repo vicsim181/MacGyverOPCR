@@ -1,3 +1,4 @@
+"""File containing the different child classes of the Tile class."""
 from tile import Tile 
 from constantes import WALL_IMAGE, EXIT_IMAGE, GUARDIAN_IMAGE, MACGYVER_IMAGE, PLASTICTUBE_IMAGE, ETHER_IMAGE, NEEDLE_IMAGE
 
