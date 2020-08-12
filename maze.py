@@ -61,9 +61,6 @@ therefore the maze cannot be converted into a visible element. Please fix it.".f
     def find_guardian(self):
         return self.find_first_tile(Guardian)
 
-    def find_exit(self):
-        return self.find_first_tile(Exit)
-
     def find_plastic_tube(self):
         return self.find_first_tile(PlasticTube)
     

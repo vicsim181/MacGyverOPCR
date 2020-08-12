@@ -1,4 +1,4 @@
-MacGyver has to escape the maze!!
+Help MacGyver to escape the maze!!
 
 To be able to run the game, you will need the following tools:
 
