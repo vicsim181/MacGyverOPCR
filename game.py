@@ -1,8 +1,7 @@
 """File which contains the Game class, its attributes and functions.These functions are the mechanic of the game."""
 import pygame
 from pygame.locals import *
-from tile import Tile
-from tiles import Wall, Corridor, Exit, Guardian, Macgyver, PlasticTube, Ether, Needle
+from tiles import Wall, Corridor, Exit, Guardian, Macgyver
 from constants import REPLAY_IMAGE, DEFEAT_IMAGE, MOVEMENTS, MESSAGE_IMAGE, BACKGROUND_IMAGE_2, BACKGROUND_IMAGE, PLASTICTUBE_IMAGE, ETHER_IMAGE, NEEDLE_IMAGE
 from maze import Maze
 
@@ -28,12 +27,12 @@ class Game():
 
     def start(self):
         """Function creating the attributes and starting the loop which allows the game running"""
-        pygame.key.set_repeat(400, 30) 
+        pygame.key.set_repeat(400, 30)
         pygame.font.init()
         self.custom_font = pygame.font.SysFont('Arial', 20)
         self.custom_text = self.custom_font.render("MacGyver's bag:", False, (0, 0, 0))
         self.maze, self.maze.liste[0] = Maze(), Macgyver()
-        self.maze.get_free_locations() 
+        self.maze.get_free_locations()
         self.maze.place_items(self.maze.places)
         continuer = True
         while continuer:
@@ -76,6 +75,7 @@ class Game():
         self.check_ready()
 
     def draw_inventory(self):
+        """Function allowing the objects to appear in the inventory of MacGyver"""
         if not self.maze.find_plastic_tube():
             self.screen.blit(self.plastic_tube_img, (0, 30))
         if not self.maze.find_ether():
@@ -84,6 +84,7 @@ class Game():
             self.screen.blit(self.needle_img, (70, 30))
 
     def draw_message(self):
+        """Function displaying a message depending on the status of the game"""
         if self.state == "beat":
             self.screen.blit(self.message_img, (170, 7))
         if self.state == "win":
@@ -92,15 +93,18 @@ class Game():
             self.screen.blit(self.defeat_img, (0, 0))
 
     def check_ready(self):
-        if not self.maze.find_plastic_tube() and not self.maze.find_ether() and not self.maze.find_needle() and self.maze.find_guardian():
+        """Function checking if MacGyver is ready to fight and win against the guardian"""
+        if not self.maze.find_plastic_tube() and not self.maze.find_ether() \
+            and not self.maze.find_needle() and self.maze.find_guardian():
             self.state = "beat"
 
     def end(self):
+        """Function restarting or exiting depending on the choice of the player"""
         if self.is_exiting:
             exit()
         elif self.is_exiting == False:
             self.__init__()
-            self.start()            
+            self.start()
 
     def draw(self):
         "Function drawing the maze, the tiles and MacGyver"
