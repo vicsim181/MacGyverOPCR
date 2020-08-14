@@ -23,7 +23,7 @@ class Game():
         self.defeat_img = pygame.image.load(DEFEAT_IMAGE).convert_alpha()
         self.custom_font, self.custom_text = None, None
         self.message_img = pygame.image.load(MESSAGE_IMAGE).convert_alpha()
-        self.maze, self.state, self.decision = None, "running", 0
+        self.state, self.decision = "running", 0
 
     def start(self):
         """Function creating the attributes and starting the loop which allows the game running"""

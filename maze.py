@@ -20,6 +20,7 @@ class Maze():
             for line in data:
                 for element in line:
                     self.liste.append(self.tile_factory(element))
+            print(self.liste)        
 
     def get_free_locations(self):
         """Function finding the free spots in the maze, to later place the items"""
