@@ -15,22 +15,27 @@ class Character():
     def __repr__(self):
         return self.name + "position: " + self.pos
 
-# maze.index(5)
 macgyver = Character("MacGyver", 0, [])
 
 def maze_creation():
     """Fonction qui génère et modifie le labyrinthe à partir du fichier CSV"""
     with open("Maze.csv", encoding="utf8") as fichier:
         data = fichier.read()
+        print(data)
         data = data[1:]
+        print(data)
         data = data.split("\n")
+        print(data)
         data = data[:-1]
+        print(data)
         for k in range(len(data)):
             data[k] = data[k].split(";")
+        print(data)    
         liste = []
         for line in data:
             for element in line:
                 liste.append(convertion_csv[element])
+        print(liste)        
     return liste
 
 def get_free_locations(maze):
