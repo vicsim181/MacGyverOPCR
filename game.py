@@ -2,7 +2,7 @@
 import pygame
 from pygame.locals import *
 from tiles import Wall, Corridor, Exit, Guardian, Macgyver
-from constants import REPLAY_IMAGE, DEFEAT_IMAGE, MOVEMENTS, MESSAGE_IMAGE, BACKGROUND_IMAGE_2, BACKGROUND_IMAGE, PLASTICTUBE_IMAGE, ETHER_IMAGE, NEEDLE_IMAGE
+from constants import VICTORY_IMAGE, DEFEAT_IMAGE, MOVEMENTS, MESSAGE_IMAGE, BACKGROUND_IMAGE_2, BACKGROUND_IMAGE, PLASTICTUBE_IMAGE, ETHER_IMAGE, NEEDLE_IMAGE
 from maze import Maze
 
 class Game():
@@ -19,7 +19,7 @@ class Game():
         self.plastic_tube_img = pygame.image.load(PLASTICTUBE_IMAGE).convert_alpha()
         self.ether_img = pygame.image.load(ETHER_IMAGE).convert_alpha()
         self.needle_img = pygame.image.load(NEEDLE_IMAGE).convert_alpha()
-        self.victory_img = pygame.image.load(REPLAY_IMAGE).convert_alpha()
+        self.victory_img = pygame.image.load(VICTORY_IMAGE).convert_alpha()
         self.defeat_img = pygame.image.load(DEFEAT_IMAGE).convert_alpha()
         self.custom_font, self.custom_text = None, None
         self.message_img = pygame.image.load(MESSAGE_IMAGE).convert_alpha()
@@ -38,7 +38,7 @@ class Game():
         while continuer:
             for event in pygame.event.get():
                 if event.type == KEYDOWN:
-                    self.move(MOVEMENTS[event.key][1]) if event.key in MOVEMENTS else ""
+                    self.move(MOVEMENTS[event.key]) if event.key in MOVEMENTS else ""
                     if self.state == "win" or self.state == "defeat":
                         self.is_exiting = Game.DECISION[event.key] if event.key in Game.DECISION else None
                         self.end()
