@@ -20,3 +20,7 @@ MOVEMENTS = {pygame.K_UP: "u",
              pygame.K_DOWN: "d",
              pygame.K_LEFT: "l",
              pygame.K_RIGHT: "r"}
+
+LEVEL = {1: "lvl1.csv",
+         2: "lvl2.csv",
+         3: "lvl3.csv"}

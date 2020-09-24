@@ -1,6 +1,7 @@
 """File in which is located the Maze class"""
 import random
 from tiles import Wall, Corridor, Guardian, Exit, Macgyver, PlasticTube, Ether, Needle
+from constants import LEVEL
 
 class Maze():
     """Class which holds and initiates the maze we will use in the game."""
@@ -10,7 +11,8 @@ class Maze():
         """Fonction qui génère et modifie le labyrinthe à partir du fichier CSV"""
         self.liste = []
         self.places = []
-        with open("Maze.csv", encoding="utf8") as fichier:
+        self.lvl = 1
+        with open(LEVEL[self.lvl], encoding="utf8") as fichier:
             data = fichier.read()
             data = data[1:]
             data = data.split("\n")
