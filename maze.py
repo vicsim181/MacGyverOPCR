@@ -7,11 +7,11 @@ class Maze():
     """Class which holds and initiates the maze we will use in the game."""
     CONVERSION_CSV = {" ": Corridor, "X": Wall, "G": Guardian, "E": Exit}
 
-    def __init__(self):
+    def __init__(self, lvl):
         """Fonction qui génère et modifie le labyrinthe à partir du fichier CSV"""
         self.liste = []
         self.places = []
-        self.lvl = 1
+        self.lvl = lvl
         with open(LEVEL[self.lvl], encoding="utf8") as fichier:
             data = fichier.read()
             data = data[1:]
@@ -34,10 +34,10 @@ class Maze():
             self.places.remove(item_pos)
             self.liste[item_pos] = tool()
 
-    def draw(self, screen):
+    def draw(self, screen, size_screen):
         """Function displaying the maze through the pygame interface"""
         for index, tile in enumerate(self.liste):
-            tile.draw(screen, index)
+            tile.draw(screen, index, size_screen)
 
     def tile_factory(self, character):
         """Function creating the tile object depending on the character found in the csv file"""

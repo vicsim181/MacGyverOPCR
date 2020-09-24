@@ -12,12 +12,12 @@ class Tile():
 
 
     @classmethod
-    def get_position(cls, index):
+    def get_position(cls, index, size_screen):
         """Function determining the pygame position of the object"""
-        return index % 15, index // 15
+        return index % size_screen, index // size_screen
 
-    def draw(self, screen, index):
+    def draw(self, screen, index, size_screen):
         """Function allowing the tile to draw itself"""
         if self.image:
-            line, column = Tile.get_position(index)
+            line, column = Tile.get_position(index, size_screen)
             screen.blit(self.image, ((line * SIZE_SPRITE) + 75, (column * SIZE_SPRITE) + 75))

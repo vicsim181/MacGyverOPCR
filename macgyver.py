@@ -3,7 +3,7 @@ from game import Game
 
 def main():
     """Main function, launching the game, calling the Game class"""
-    game = Game()
+    game = Game(1)
     game.start()
 
 if __name__ == '__main__':

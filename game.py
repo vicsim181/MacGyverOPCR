@@ -9,11 +9,16 @@ class Game():
     """Class holding the main mechanisms of the game"""
     DECISION = {pygame.K_F1: False,
                 pygame.K_F2: True}
+    
+    SIZE = {1: 15,
+            2: 20,
+            3: 25}
 
-    def __init__(self):
+    def __init__(self, lvl):
         """Constructor"""
-        self.is_exiting = None
-        self.screen = pygame.display.set_mode((600, 600))
+        self.is_exiting, self.level = None, lvl
+        self.size_pxl = Game.SIZE[self.level]
+        self.screen = pygame.display.set_mode((self.size_pxl * 40, self.size_pxl * 40))
         self.background = pygame.image.load(BACKGROUND_IMAGE).convert()
         self.background2 = pygame.image.load(BACKGROUND_IMAGE_2).convert()
         self.plastic_tube_img = pygame.image.load(PLASTICTUBE_IMAGE).convert_alpha()
@@ -31,7 +36,7 @@ class Game():
         pygame.font.init()
         self.custom_font = pygame.font.SysFont('Arial', 20)
         self.custom_text = self.custom_font.render("MacGyver's bag:", False, (0, 0, 0))
-        self.maze, self.maze.liste[0] = Maze(), Macgyver()
+        self.maze, self.maze.liste[0] = Maze(self.level), Macgyver()
         self.maze.get_free_locations()
         self.maze.place_items(self.maze.places)
         continuer = True
@@ -52,13 +57,13 @@ class Game():
         """
         macgyver_pos = self.maze.find_macgyver()
         if movement == "u":
-            mouv = 0 if macgyver_pos / 15 < 1 else -15
+            mouv = 0 if macgyver_pos / self.size_pxl < 1 else -self.size_pxl
         elif movement == "d":
-            mouv = 0 if macgyver_pos / 15 >= 14 else 15
+            mouv = 0 if macgyver_pos / self.size_pxl >= (self.size_pxl - 1) else self.size_pxl
         elif movement == "l":
-            mouv = 0 if macgyver_pos % 15 == 0 else -1
+            mouv = 0 if macgyver_pos % self.size_pxl == 0 else -1
         elif movement == "r":
-            mouv = 0 if macgyver_pos % 15 == 14 else 1
+            mouv = 0 if macgyver_pos % self.size_pxl == (self.size_pxl - 1) else 1
         if isinstance(self.maze.liste[macgyver_pos + mouv], Wall):
             return
         elif isinstance(self.maze.liste[macgyver_pos + mouv], Guardian):
@@ -103,7 +108,7 @@ class Game():
         if self.is_exiting:
             exit()
         elif self.is_exiting == False:
-            self.__init__()
+            self.__init__(self.level + 1)
             self.start()
 
     def draw(self):
@@ -111,7 +116,7 @@ class Game():
         self.screen.blit(self.background, (0, 0))
         self.screen.blit(self.background2, (75, 75))
         self.screen.blit(self.custom_text, (0, 0))
-        self.maze.draw(self.screen)
+        self.maze.draw(self.screen, self.size_pxl)
         self.draw_inventory()
         self.draw_message()
         pygame.display.flip()
