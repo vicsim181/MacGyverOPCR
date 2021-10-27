@@ -2,3 +2,4 @@ dist/
 essai.py
 Env1/
 
+*.pyc
