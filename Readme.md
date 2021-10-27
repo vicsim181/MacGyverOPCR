@@ -13,6 +13,20 @@ Of course he will need to find his way through the maze and reach the guardian.
 If he collected all the items, he will fight successfuly and will be able to escape!
 If he didn't, well...
 
+Fork this repository or download the files and install the dependencies with:
+
+On Windows:
+
+```bash
+> pip install -r requirements.txt
+```
+
+On Unix:
+
+```bash
+> pip3 install -r requirements.txt
+```
+
 To launch the game on Windows:
 
 ```bash
